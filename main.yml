@@ -19,3 +19,32 @@
         ansible_become: yes
         docker_users: ["{{ ansible_user }}"]
 
+    - name: mkdir owncloud
+      file:
+        path: "{{ OWNCLOUD_ROOT }}"
+        state: directory
+
+    - name: render docker-compose.yml
+      template:
+        src: docker-compose.yml
+        dest: "{{ OWNCLOUD_ROOT }}/docker-compose.yml"
+        force: yes
+
+    - name: apt install supervisor
+      become: yes
+      apt:
+        update_cache: yes
+        name: supervisor
+
+    - name: render owncloud supervisor conf
+      become: yes
+      template:
+        src: owncloud.conf
+        dest: /etc/supervisor/conf.d/owncloud.conf
+        force: yes
+
+    - name: supervisorctl restart
+      become: yes
+      supervisorctl:
+        name: owncloud
+        state: restarted
