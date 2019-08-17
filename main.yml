@@ -2,7 +2,16 @@
 
 - name: setup owncloud in docker
   hosts: owncloud
+  vars:
+    # modify these
+    OWNCLOUD_ADMIN_USERNAME: admin
+    OWNCLOUD_ADMIN_PASSWORD: admin
+    OWNCLOUD_ROOT: "{{ ansible_env.HOME }}/owncloud"
+    OWNCLOUD_DOMAIN: localhost
+    OWNCLOUD_VERSION: latest
+    OWNCLOUD_HTTP_PORT: 8080
   tasks:
+
     - name: setup docker
       include_role:
         name: geerlingguy.docker
