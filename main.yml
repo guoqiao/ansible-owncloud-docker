@@ -1,0 +1,12 @@
+#!/usr/bin/ansible-playbook
+
+- name: setup owncloud in docker
+  hosts: owncloud
+  tasks:
+    - name: setup docker
+      include_role:
+        name: geerlingguy.docker
+      vars:
+        ansible_become: yes
+        docker_users: ["{{ ansible_user }}"]
+
